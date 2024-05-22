@@ -10,20 +10,33 @@ Classe Book:
         return_book()- Contrassegna il libro come restituito.
 """
 class Book:
+
+    # Attributi:
+    #     book_id: str - Identificatore di un libro.
+    #     title: str - titolo del libro.
+    #     author: str - autore del libro
+    #     is_borrowed: boolean - booleano che indica se il libro è in prestito o meno.
     def __init__(self, book_id: str, title: str, author: str):
         self.book_id = book_id
         self.title = title
         self.author = author
         self.is_borrowed = False
     
+
+    # borrow(): Contrassegna il libro come preso in prestito se non è già preso in prestito.
     def borrow(self):
         self.is_borrowed = True
     
+
+    # return_book(): Contrassegna il libro come restituito.
     def return_book(self):
         self.is_borrowed = False
 
+
+    # __str__(): Stampa il nome del libro
     def __str__(self) -> str:
         return self.title
+
 
 """
 Classe Member:
@@ -33,15 +46,23 @@ Classe Member:
         borrowed_books: list[Book] - lista dei libri presi in prestito.
     Metodi:
         borrow_book(book): aggiunge il libro nella lista borrowed_books 
-        se non è già stato preso in prestito.
+            se non è già stato preso in prestito.
         return_book(book): rimuove il libro dalla lista borrowed_books.
 """
 class Member:
+
+    # Attributi:
+    #   member_id: str - identificativo del membro.
+    #   name: str - il nome del membro.
+    #   borrowed_books: list[Book] - lista dei libri presi in prestito.
     def __init__(self, member_id: str, name: str):
         self.member_id = member_id
         self.name = name
         self.borrowed_books = []
     
+
+    # borrow_book(book): aggiunge il libro nella lista borrowed_books 
+    #   se non è già stato preso in prestito.
     def borrow_book(self, book):
         if book.is_borrowed == False:
             self.borrowed_books.append(book)
@@ -49,13 +70,15 @@ class Member:
             return 
         raise ValueError("Book is already borrowed")
     
+
+    # return_book(book): rimuove il libro dalla lista borrowed_books.
     def return_book(self, book):
         if book in self.borrowed_books:
             self.borrowed_books.remove(book)
             book.return_book()
             return
-        
         raise ValueError("Book not borrowed by this member")
+
 
 """
 Classe Library:
@@ -68,7 +91,7 @@ Classe Library:
 
 """
 """
-    Methodi:
+    Metodi:
         add_book(book_id: str, title: str, author: str): Aggiunge un nuovo 
             libro nella biblioteca.
         register_member(member_id:str, name: str): Iscrive un nuovo membro 
@@ -80,19 +103,32 @@ Classe Library:
         get_borrowed_books(member_id): list[Book] - restituisce la lista dei 
             libri presi in prestito dal membro.    
 """
-
 class Library:
+
+    # Attributi:
+    #   books: dict[str, Book] - dizionario che ha per chiave l'id del libro 
+    #       e per valore l'oggetto Book
+    #   members: dict[str, Member] - dizionario che ha per chiave l'id del 
+    #       membro e per valore l'oggetto Membro
     def __init__(self):
         self.books: dict[str, Book] = dict()
         self.members: dict[str, Member] = dict()
 
-    
+
+    # add_book(book_id: str, title: str, author: str): Aggiunge un nuovo 
+    #   libro nella biblioteca.
     def add_book(self, book_id: str, title: str, author: str):
         self.books[book_id] = Book(book_id, title, author)
     
+
+    # register_member(member_id:str, name: str): Iscrive un nuovo membro 
+    #   nella biblioteca.
     def register_member(self, member_id: str, name: str):
         self.members[member_id] = Member(member_id, name)
         
+
+    # borrow_book(member_id: str, book_id: str): Permette al membro di 
+    #   prendere in prestito il libro.
     def borrow_book(self, member_id: str, book_id: str):
         if member_id not in self.members:
             raise ValueError("Member not found")
@@ -103,12 +139,18 @@ class Library:
 
         member.borrow_book(book)
 
+
+    # return_book(member_id: str, book_id: str): Permette al membro di 
+    #   restituire il libro.
     def return_book(self, member_id, book_id):
         member = self.members[member_id]
         book = self.books[book_id]
 
         member.return_book(book)
 
+
+    # get_borrowed_books(member_id): list[Book] - restituisce la lista dei 
+    #   libri presi in prestito dal membro. 
     def get_borrowed_books(self, member_id):
         member = self.members[member_id]
 
@@ -118,6 +160,9 @@ class Library:
         return books
 
 
+
+
+##########TEST###############################################################################################
 #1###########################################################################################################
 
 library = Library()
